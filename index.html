@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienestar Integral - Nutrición Celular</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#1b4332',
+                            medium: '#2d6a4f',
+                            light: '#40916c',
+                            accent: '#74c69d',
+                            lime: '#b7e4c7',
+                            soft: '#f4f9f4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f9f4;
+            overscroll-behavior: contain;
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Barra de scroll personalizada */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #40916c;
+            border-radius: 10px;
+        }
+        /* Animación para licuar */
+        @keyframes blendShake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .blending {
+            animation: blendShake 0.15s infinite;
+        }
+        .liquid-rise {
+            transition: height 3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-800">
+
+    <!-- Barra de Marca Superior -->
+    <header class="bg-brand-dark text-white px-4 py-3 shadow-md sticky top-0 z-50">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">🍏</span>
+                <div>
+                    <h1 class="font-extrabold tracking-tight text-xs uppercase text-brand-accent">Protocolo de Salud</h1>
+                    <p class="serif-title text-base font-bold leading-none">Nutrición Celular</p>
+                </div>
+            </div>
+            <div class="bg-brand-medium text-brand-lime text-xs font-bold px-2.5 py-1 rounded-full border border-brand-light">
+                Mix Verde • 100% Natural
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal Móvil -->
+    <main class="flex-grow max-w-md w-full mx-auto px-4 py-4 pb-28">
+
+        <!-- PESTAÑA 1: PRESENTACIÓN INTERACTIVA (LÁMINAS) -->
+        <section id="tab-presentacion" class="tab-content block">
+            <div class="bg-white rounded-3xl p-6 shadow-xl border border-brand-lime/30 relative min-h-[500px] flex flex-col justify-between overflow-hidden">
+                <!-- Marca de agua de hoja -->
+                <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none">
+                    <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" class="text-brand-dark">
+                        <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L7.58,17.5C8.42,18 9.27,18 10,18C15,18 19,14 19,9C19,9 21,5 22,2C19,3 17,8 17,8M12,14C10,14 8.7,12.5 8,11C9.5,10.3 11,9 11,7C9,7 7.7,8.3 7,9.8C5.5,9.1 4,7.8 4,5.8C4,5.8 8,3.8 11,3.8C16,3.8 20,7.8 20,12.8C20,13.2 19.9,13.6 19.8,14C18,14 15,14 12,14Z" />
+                    </svg>
+                </div>
+
+                <!-- Progreso -->
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-light uppercase tracking-wider" id="slide-tag">Lámina</span>
+                    <div class="flex gap-1" id="dots-indicator"></div>
+                </div>
+
+                <!-- Visor de Diapositiva -->
+                <div id="slide-viewport" class="flex-grow flex flex-col justify-center py-4 text-slate-700"></div>
+
+                <!-- Controles -->
+                <div class="flex items-center justify-between mt-6 pt-4 border-t border-slate-100 z-10">
+                    <button onclick="prevSlide()" id="btn-prev" class="flex items-center gap-1 text-slate-400 hover:text-brand-dark transition-all py-2 px-3 rounded-xl hover:bg-slate-50 font-semibold text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                        Atrás
+                    </button>
+                    <span class="text-xs text-slate-400 font-bold" id="slide-index">1 de 8</span>
+                    <button onclick="nextSlide()" id="btn-next" class="flex items-center gap-1 bg-brand-dark hover:bg-brand-medium text-white transition-all py-2 px-4 rounded-xl font-bold text-sm shadow-md shadow-brand-dark/20">
+                        Siguiente
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-4 bg-brand-lime/10 border border-brand-lime/40 rounded-2xl p-4 flex gap-3 items-start">
+                <span class="text-xl">💡</span>
+                <p class="text-xs text-brand-dark leading-relaxed font-medium">
+                    <strong>Consejo Comercial:</strong> Muestra estas láminas deslizables a tus clientes en el celular para educarlos en los beneficios de salud y justificar el valor sin problemas.
+                </p>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 2: SIMULADOR DE LICUADO -->
+        <section id="tab-licuadora" class="tab-content hidden">
+            <div class="bg-white rounded-3xl p-6 shadow-xl border border-brand-lime/30">
+                <div class="text-center mb-6">
+                    <span class="bg-brand-lime/40 text-brand-dark text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Demostración Rápida</span>
+                    <h2 class="serif-title text-2xl font-bold mt-2 text-brand-dark">Juguera Interactiva</h2>
+                    <p class="text-xs text-slate-500 mt-1">¡Mira lo fácil, rápido y limpio que es preparar tu dosis de salud en solo 1 minuto!</p>
+                </div>
+
+                <!-- Licuadora física en CSS -->
+                <div class="relative w-full max-w-[240px] mx-auto h-[280px] bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-end p-4 overflow-hidden shadow-inner">
+                    <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[120px] h-[15px] bg-slate-800 rounded-full z-20"></div>
+                    <div class="absolute top-6 left-1/2 -translate-x-1/2 w-[40px] h-[10px] bg-slate-700 rounded-t-lg z-20"></div>
+
+                    <!-- Vaso transparente -->
+                    <div class="absolute top-12 left-1/2 -translate-x-1/2 w-[110px] h-[170px] bg-white/20 border-2 border-slate-300 rounded-b-3xl z-10 overflow-hidden shadow-lg backdrop-blur-xs flex flex-col justify-end">
+                        <div class="absolute left-2 top-4 w-2 h-0.5 bg-slate-400"></div>
+                        <div class="absolute left-2 top-10 w-3 h-0.5 bg-slate-400"></div>
+                        <div class="absolute left-2 top-16 w-2 h-0.5 bg-slate-400"></div>
+                        <div class="absolute left-2 top-22 w-3 h-0.5 bg-slate-400"></div>
+                        <div class="absolute left-2 top-28 w-2 h-0.5 bg-slate-400"></div>
+
+                        <!-- Vegetales troceados -->
+                        <div id="blender-veggies" class="absolute inset-x-0 bottom-0 h-0 bg-brand-light/30 flex flex-wrap content-end justify-center gap-1 p-2 transition-all duration-700 overflow-hidden">
+                            <span class="w-4 h-4 bg-green-500 rounded-xs animate-bounce"></span>
+                            <span class="w-3.5 h-3.5 bg-emerald-600 rounded-xs"></span>
+                            <span class="w-4 h-4 bg-lime-500 rounded-xs animate-pulse"></span>
+                            <span class="w-3 h-3 bg-green-300 rounded-xs"></span>
+                            <span class="w-3.5 h-3.5 bg-yellow-100 rounded-xs"></span>
+                        </div>
+
+                        <!-- Líquido de llenado -->
+                        <div id="blender-liquid" class="absolute inset-x-0 bottom-0 h-0 bg-sky-200/40 border-t border-sky-300 transition-all duration-700 z-10"></div>
+
+                        <!-- Batido procesado -->
+                        <div id="blender-smoothie" class="absolute inset-x-0 bottom-0 h-0 bg-gradient-to-t from-brand-dark to-brand-light transition-all duration-1000 z-20 flex flex-col items-center justify-center">
+                            <div class="w-full h-full relative opacity-80" id="blender-vortex"></div>
+                        </div>
+
+                        <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-2 bg-slate-600 rounded-full z-30"></div>
+                    </div>
+
+                    <!-- Motor -->
+                    <div id="blender-base" class="w-[140px] h-[55px] bg-slate-300 rounded-t-xl mx-auto flex flex-col items-center justify-center gap-1 shadow-md border-t border-white/60 z-15">
+                        <div class="w-3 h-3 rounded-full bg-slate-800 border-2 border-slate-400 shadow-inner"></div>
+                        <div class="flex gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" id="blender-led"></span>
+                            <span class="text-[8px] font-bold text-slate-600 tracking-wider">S-MIN MIX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control de Pasos -->
+                <div class="mt-6">
+                    <div class="flex justify-between items-center mb-4 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <span class="text-xs font-bold text-slate-400">PASO ACTUAL:</span>
+                        <span id="step-desc" class="text-sm font-extrabold text-brand-dark">1. Abre tu bolsa de Mix Verde</span>
+                    </div>
+
+                    <button onclick="nextBlendStep()" id="btn-blend-action" class="w-full bg-brand-dark hover:bg-brand-medium text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-brand-dark/20 flex items-center justify-center gap-2 transition-all">
+                        <span>Añadir 200g de Mix Verde al vaso</span>
+                        <span class="text-xl">👉</span>
+                    </button>
+
+                    <button onclick="resetBlender()" class="w-full mt-3 text-xs text-slate-400 hover:text-red-500 transition-all font-semibold py-2">
+                        Reiniciar simulación
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 3: CALCULADORA DE DÍAS Y PEDIDOS -->
+        <section id="tab-calculadora" class="tab-content hidden">
+            <div class="bg-white rounded-3xl p-6 shadow-xl border border-brand-lime/30">
+                <div class="text-center mb-6">
+                    <span class="bg-brand-lime/40 text-brand-dark text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Planificador Inteligente</span>
+                    <h2 class="serif-title text-2xl font-bold mt-2 text-brand-dark">Calcula tu Bienestar</h2>
+                    <p class="text-xs text-slate-500 mt-1">Ingresa cuántos días quieres cuidarte y calculamos tu stock ideal de inmediato.</p>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">¿Para cuántos días de nutrición?</label>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button onclick="setDays(5)" class="day-btn py-3 rounded-xl border-2 border-slate-200 hover:border-brand-light font-bold text-sm bg-slate-50 text-slate-600 transition-all">5 Días</button>
+                            <button onclick="setDays(10)" class="day-btn py-3 rounded-xl border-2 border-slate-200 hover:border-brand-light font-bold text-sm bg-slate-50 text-slate-600 transition-all">10 Días</button>
+                            <button onclick="setDays(15)" id="default-days-btn" class="day-btn py-3 rounded-xl border-2 border-brand-light font-bold text-sm bg-brand-soft text-brand-dark transition-all">15 Días</button>
+                            <button onclick="setDays(30)" class="day-btn py-3 rounded-xl border-2 border-slate-200 hover:border-brand-light font-bold text-sm bg-slate-50 text-slate-600 transition-all">30 Días</button>
+                        </div>
+                        <div class="mt-3 flex items-center gap-2">
+                            <span class="text-xs font-semibold text-slate-500">O ingresa un número personalizado:</span>
+                            <input type="number" id="custom-days" value="15" min="1" max="90" oninput="calculateCustomDays()" class="w-16 bg-slate-100 border border-slate-300 rounded-lg py-1 px-2 text-center text-sm font-bold text-brand-dark focus:outline-brand-light">
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-4"></div>
+
+                    <!-- Resultados de Pedido -->
+                    <div class="bg-gradient-to-br from-brand-dark to-brand-medium text-white rounded-2xl p-5 shadow-inner">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs uppercase font-extrabold text-brand-lime">Tu Pedido Recomendado</span>
+                            <span class="text-[10px] bg-brand-light text-white px-2 py-0.5 rounded-full font-bold">700g por Bolsa</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div class="bg-black/10 rounded-xl p-3 border border-white/5">
+                                <span class="text-2xl font-black block text-brand-lime" id="res-bolsas">3</span>
+                                <span class="text-[10px] uppercase font-bold text-slate-300">Bolsas de Mix</span>
+                            </div>
+                            <div class="bg-black/10 rounded-xl p-3 border border-white/5">
+                                <span class="text-2xl font-black block text-brand-lime" id="res-precio">$15.000</span>
+                                <span class="text-[10px] uppercase font-bold text-slate-300">Valor Total</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-white/10 space-y-2 text-xs">
+                            <div class="flex justify-between items-center text-slate-200">
+                                <span>🥦 Peso de Vegetales:</span>
+                                <span class="font-bold text-white" id="res-peso">2.1 Kilogramos</span>
+                            </div>
+                            <div class="flex justify-between items-center text-slate-200">
+                                <span>🛒 Desperdicio de verdura evitado:</span>
+                                <span class="font-bold text-green-300">100% Garantizado</span>
+                            </div>
+                            <div class="flex justify-between items-center text-slate-200">
+                                <span>⏱️ Tiempo total ahorrado:</span>
+                                <span class="font-bold text-brand-lime" id="res-tiempo">~45 Minutos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selección de Despacho y Envío -->
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">¿Dónde te lo entregamos?</label>
+                            <select id="delivery-zone" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-3 px-4 text-sm font-semibold text-slate-700 focus:border-brand-light focus:outline-none">
+                                <option value="Iquique">Iquique (Reparto a domicilio)</option>
+                                <option value="Alto Hospicio">Alto Hospicio (Reparto a domicilio)</option>
+                            </select>
+                        </div>
+
+                        <button onclick="sendOrderWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-black py-4 px-6 rounded-2xl shadow-lg shadow-green-500/20 flex items-center justify-center gap-3 transition-all active:scale-95">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.451 5.486 0 9.95-4.46 9.954-9.93.002-2.651-1.02-5.143-2.877-7c-1.856-1.856-4.324-2.879-6.973-2.88-5.49 0-9.956 4.461-9.96 9.932-.001 1.631.43 3.22 1.249 4.636l-.984 3.595 3.68-.964zm10.607-7.234c-.3-.15-1.776-.876-2.046-.975-.27-.1-.466-.15-.66.15-.194.3-.755.95-.925 1.14-.17.19-.34.215-.64.065-.3-.15-1.266-.466-2.411-1.487-.891-.795-1.492-1.777-1.667-2.077-.175-.3-.018-.463.13-.612.134-.133.3-.349.45-.523.15-.174.2-.3.3-.5.1-.2.05-.375-.025-.524-.075-.15-.66-1.59-.905-2.18-.24-.575-.48-.497-.66-.505-.17-.008-.365-.01-.56-.01-.195 0-.51.074-.777.364-.266.29-1.016.992-1.016 2.42 0 1.427 1.039 2.806 1.184 3.001.145.195 2.044 3.121 4.953 4.38.691.3 1.232.478 1.653.611.693.22 1.325.19 1.825.115.557-.083 1.776-.726 2.026-1.427.25-.7 0-1.3-.075-1.425-.075-.125-.27-.2-1.57-.85z"/></svg>
+                            <span>Enviar Pedido Directo</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 4: ASESORÍA NUTRICIONAL INTELIGENTE (Gemini API Integration) -->
+        <section id="tab-asesoria" class="tab-content hidden">
+            <div class="bg-white rounded-3xl p-6 shadow-xl border border-brand-lime/30">
+                <div class="text-center mb-6">
+                    <span class="bg-brand-lime/40 text-brand-dark text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Asistente IA</span>
+                    <h2 class="serif-title text-2xl font-bold mt-2 text-brand-dark">Asesor de Salud IA 🤖</h2>
+                    <p class="text-xs text-slate-500 mt-1">Con el poder de la Inteligencia Artificial de Gemini, creamos un protocolo de bienestar a tu medida.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Selección de Meta -->
+                    <div>
+                        <label class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">1. ¿Cuál es tu meta de salud hoy?</label>
+                        <div class="grid grid-cols-2 gap-2" id="ai-goals-container">
+                            <button onclick="selectAiGoal('Desintoxicar el Hígado 🧼')" class="ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center">Desintoxicar Hígado 🧼</button>
+                            <button onclick="selectAiGoal('Tener Más Energía ⚡')" class="ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center">Más Energía ⚡</button>
+                            <button onclick="selectAiGoal('Mejorar la Digestión 🟢')" class="ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center">Digestión Regular 🟢</button>
+                            <button onclick="selectAiGoal('Longevidad Celular ❤️')" class="ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center">Antienvejecimiento ❤️</button>
+                        </div>
+                    </div>
+
+                    <!-- Condición Personalizada -->
+                    <div>
+                        <label class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">2. ¿Tienes alguna condición o consulta especial? (Opcional)</label>
+                        <textarea id="ai-user-query" rows="2" placeholder="Ej: Tengo colon irritable, hipertensión, o sufro de mucha fatiga en las tardes..." class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-3 px-4 text-xs font-medium text-slate-700 focus:border-brand-light focus:outline-none resize-none"></textarea>
+                    </div>
+
+                    <!-- Botón Generador -->
+                    <button onclick="generateAiProtocol()" class="w-full bg-brand-dark hover:bg-brand-medium text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-brand-dark/20 flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <span>✨ Obtener Protocolo Personalizado ✨</span>
+                    </button>
+
+                    <!-- Loader del Asistente -->
+                    <div id="ai-loader" class="hidden bg-brand-soft/80 border border-brand-lime/40 rounded-2xl p-5 text-center space-y-3 animate-pulse">
+                        <div class="flex justify-center">
+                            <svg class="animate-spin h-8 w-8 text-brand-medium" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-xs font-bold text-brand-dark" id="ai-loader-text">Analizando propiedades celulares del Pepino, Espinaca y Apio...</p>
+                        <p class="text-[10px] text-slate-400">Gemini está formulando tu rutina diaria óptima...</p>
+                    </div>
+
+                    <!-- Resultados de la Recomendación IA -->
+                    <div id="ai-results-card" class="hidden bg-emerald-50 border border-brand-lime/40 rounded-3xl p-5 space-y-4">
+                        <div class="flex items-center gap-2 border-b border-brand-lime/20 pb-2">
+                            <span class="text-xl">📋</span>
+                            <div>
+                                <h4 class="font-extrabold text-xs text-brand-dark uppercase tracking-wider">Tu Plan Sugerido por IA</h4>
+                                <span class="text-[9px] text-brand-light font-bold" id="ai-result-tag">Plan Generado en Vivo</span>
+                            </div>
+                        </div>
+
+                        <!-- Bloque de Texto de IA -->
+                        <div class="text-xs text-slate-700 leading-relaxed space-y-3" id="ai-rendered-response">
+                            <!-- Inyección HTML de la respuesta -->
+                        </div>
+
+                        <!-- Botón WhatsApp Especial IA -->
+                        <button onclick="sendAiWhatsAppOrder()" class="w-full bg-green-500 hover:bg-green-600 text-white font-black py-3 px-4 rounded-xl shadow-md text-xs flex items-center justify-center gap-2 transition-all">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.451 5.486 0 9.95-4.46 9.954-9.93.002-2.651-1.02-5.143-2.877-7c-1.856-1.856-4.324-2.879-6.973-2.88-5.49 0-9.956 4.461-9.96 9.932-.001 1.631.43 3.22 1.249 4.636l-.984 3.595 3.68-.964zm10.607-7.234c-.3-.15-1.776-.876-2.046-.975-.27-.1-.466-.15-.66.15-.194.3-.755.95-.925 1.14-.17.19-.34.215-.64.065-.3-.15-1.266-.466-2.411-1.487-.891-.795-1.492-1.777-1.667-2.077-.175-.3-.018-.463.13-.612.134-.133.3-.349.45-.523.15-.174.2-.3.3-.5.1-.2.05-.375-.025-.524-.075-.15-.66-1.59-.905-2.18-.24-.575-.48-.497-.66-.505-.17-.008-.365-.01-.56-.01-.195 0-.51.074-.777.364-.266.29-1.016.992-1.016 2.42 0 1.427 1.039 2.806 1.184 3.001.145.195 2.044 3.121 4.953 4.38.691.3 1.232.478 1.653.611.693.22 1.325.19 1.825.115.557-.083 1.776-.726 2.026-1.427.25-.7 0-1.3-.075-1.425-.075-.125-.27-.2-1.57-.85z"/></svg>
+                            <span>✨ Solicitar Pack Sugerido por IA ✨</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 5: SINERGIA Y COMPROMISO DE CALIDAD -->
+        <section id="tab-ingredientes" class="tab-content hidden">
+            <!-- Cuadrícula de Sinergia Nutricional -->
+            <div class="bg-white rounded-3xl p-6 shadow-xl border border-brand-lime/30 mb-5">
+                <div class="text-center mb-6">
+                    <span class="bg-brand-lime/40 text-brand-dark text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Los 5 Elementos</span>
+                    <h2 class="serif-title text-2xl font-bold mt-2 text-brand-dark">Sinergia Celular</h2>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center gap-4 bg-brand-soft p-3 rounded-2xl border border-brand-lime/20">
+                        <span class="text-3xl">🍏</span>
+                        <div>
+                            <h4 class="font-bold text-sm text-brand-dark">Manzana Verde (Antioxidación)</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Aporta fibra soluble y frena los radicales libres causantes de la vejez celular prematura.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-brand-soft p-3 rounded-2xl border border-brand-lime/20">
+                        <span class="text-3xl">🥒</span>
+                        <div>
+                            <h4 class="font-bold text-sm text-brand-dark">Pepino (Agua Estructurada)</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Mineraliza e hidrata los órganos profundos desde la primera hora del día.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-brand-soft p-3 rounded-2xl border border-brand-lime/20">
+                        <span class="text-3xl">🥬</span>
+                        <div>
+                            <h4 class="font-bold text-sm text-brand-dark">Apio (Salud Digestiva)</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Actúa como un tónico diurético que limpia toxinas retenidas en la sangre.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-brand-soft p-3 rounded-2xl border border-brand-lime/20">
+                        <span class="text-3xl">🌱</span>
+                        <div>
+                            <h4 class="font-bold text-sm text-brand-dark">Espinaca (Oxigenación)</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Cargada de clorofila viva que oxigena de forma natural el torrente circulatorio.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-brand-soft p-3 rounded-2xl border border-brand-lime/20">
+                        <span class="text-3xl">⚡</span>
+                        <div>
+                            <h4 class="font-bold text-sm text-brand-dark">Jengibre (Despertar Metabólico)</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed">Pequeño empujón térmico que activa suavemente la asimilación digestiva.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caja de Compromiso de Calidad -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-5 mb-5">
+                <div class="flex gap-2 items-center mb-2">
+                    <span class="text-lg">🌿</span>
+                    <h4 class="font-bold text-xs text-brand-dark uppercase tracking-wider">Compromiso con la Calidad</h4>
+                </div>
+                <div class="text-[11px] text-slate-700 leading-relaxed space-y-2">
+                    <p>
+                        Este producto es un apoyo nutricional <strong>100% de origen natural</strong> (pura verdura cruda seleccionada, lavada y congelada, sin preservantes, saborizantes artificiales, químicos ni aditivos de ningún tipo).
+                    </p>
+                    <p>
+                        Queremos ser transparentes: <strong>en la salud no existen las soluciones milagrosas de un solo día</strong>. Los verdaderos beneficios de la nutrición celular se consolidan gracias a la <strong>constancia, regularidad y disciplina en el consumo diario</strong>, acompañado siempre de abundante agua pura y hábitos de vida saludables. No sustituye tratamientos médicos.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Barra de Navegación Inferior (5 Columnas para acomodar Asesoría ✨) -->
+    <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 py-2.5 px-2 shadow-2xl z-40">
+        <div class="max-w-md mx-auto grid grid-cols-5 gap-1">
+            <button onclick="switchTab('presentacion')" id="nav-presentacion" class="nav-btn flex flex-col items-center justify-center gap-1 py-1 text-brand-dark font-bold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <span class="text-[9px] tracking-tight">Presentar</span>
+            </button>
+            <button onclick="switchTab('licuadora')" id="nav-licuadora" class="nav-btn flex flex-col items-center justify-center gap-1 py-1 text-slate-400 hover:text-brand-light font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <span class="text-[9px] tracking-tight">Preparar</span>
+            </button>
+            <button onclick="switchTab('calculadora')" id="nav-calculadora" class="nav-btn flex flex-col items-center justify-center gap-1 py-1 text-slate-400 hover:text-brand-light font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                <span class="text-[9px] tracking-tight">Calcular</span>
+            </button>
+            <!-- Nueva pestaña de Asesoría de IA ✨ -->
+            <button onclick="switchTab('asesoria')" id="nav-asesoria" class="nav-btn flex flex-col items-center justify-center gap-1 py-1 text-slate-400 hover:text-brand-light font-medium">
+                <span class="text-lg">✨</span>
+                <span class="text-[9px] tracking-tight">Asesoría ✨</span>
+            </button>
+            <button onclick="switchTab('ingredientes')" id="nav-ingredientes" class="nav-btn flex flex-col items-center justify-center gap-1 py-1 text-slate-400 hover:text-brand-light font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <span class="text-[9px] tracking-tight">Sinergia</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Script de Programación e Interacciones -->
+    <script>
+        // ==========================================
+        // 🚨 MODIFICA TU NÚMERO DE WHATSAPP AQUÍ 🚨
+        // ==========================================
+        // Código país Chile (56) + 9 dígitos de tu móvil. Ejemplo: "569XXXXXXXX"
+        const TELEFONO_VENDEDOR = "56976128721"; 
+
+        // Datos del Presentador (Basado en el PDF original de Nutrición Celular)
+        const slides = [
+            {
+                tag: "LÁMINA 1 • PORTADA",
+                content: `
+                    <div class="text-center">
+                        <span class="text-5xl block mb-6 animate-pulse">🌿</span>
+                        <span class="bg-brand-lime text-brand-dark text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">Protocolo Preventivo</span>
+                        <h1 class="serif-title text-3.5xl font-black mt-4 mb-2 text-brand-dark leading-tight">Bienestar Integral:</h1>
+                        <p class="text-lg font-bold text-brand-light leading-snug">Nutrición Celular</p>
+                        <p class="text-sm text-slate-500 mt-6 leading-relaxed">
+                            La forma más sencilla, pura y científica de cuidar tu cuerpo cada mañana.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                tag: "LÁMINA 2 • EL FILTRO INTERNO",
+                content: `
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-3xl">🛡️</span>
+                            <h3 class="serif-title text-xl font-bold text-brand-dark">El Hígado: Tu Héroe Silencioso</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            Este órgano vital procesa todo lo que consumimos y purifica la sangre. Cuando te sientes pesado, cansado o sin energía, es una señal clara de que tu filtro necesita un respiro urgente.
+                        </p>
+                        <div class="bg-brand-soft border border-brand-lime/40 rounded-2xl p-4">
+                            <p class="text-xs text-brand-dark font-semibold italic">
+                                "Nuestra mezcla verde actúa como un soporte orgánico inmediato, facilitando esta desintoxicación celular diaria de forma natural."
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "LÁMINA 3 • SINERGIA ACTIVA",
+                content: `
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-3xl">🌱</span>
+                            <h3 class="serif-title text-xl font-bold text-brand-dark">Sinergia Natural</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            La combinación de nuestros ingredientes funciona en equipo biológico:
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-2 text-xs">
+                                <span class="text-brand-light font-bold">⚡ Vitalidad:</span>
+                                <span class="text-slate-600">La clorofila de la espinaca ayuda a oxigenar las células naturalmente.</span>
+                            </div>
+                            <div class="flex items-start gap-2 text-xs">
+                                <span class="text-brand-light font-bold">💧 Hidratación:</span>
+                                <span class="text-slate-600">El pepino y apio aportan agua biológicamente estructurada y sales minerales esenciales.</span>
+                            </div>
+                            <div class="flex items-start gap-2 text-xs">
+                                <span class="text-brand-light font-bold">🔥 Activación:</span>
+                                <span class="text-slate-600">Un toque de jengibre despierta tu metabolismo basal suavemente.</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "LÁMINA 4 • ESCUDO CELULAR",
+                content: `
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-3xl">⏳</span>
+                            <h3 class="serif-title text-xl font-bold text-brand-dark">Escudo contra el Tiempo</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            El envejecimiento celular no se detiene, pero cómo envejeces es una decisión tuya. El estrés diario y la mala alimentación "oxidan" nuestras células.
+                        </p>
+                        <div class="bg-brand-dark text-white rounded-2xl p-4 text-xs font-medium leading-relaxed">
+                            Al consumir vegetales crudos frescos, inyectas una dosis densa de antioxidantes vivos que protegen tus órganos vitales.
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "LÁMINA 5 • PREVENCIÓN",
+                content: `
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-brand-lime/50 text-brand-dark rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-4 border-2 border-brand-light">
+                            80%
+                        </div>
+                        <h3 class="serif-title text-xl font-bold text-brand-dark mb-2">Bienestar Preventivo</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed px-4">
+                            Estudios demuestran que la gran mayoría de las molestias de digestión lenta y la fatiga moderna se pueden prevenir con nutrición inteligente de base.
+                        </p>
+                        <p class="text-xs text-brand-light font-bold mt-4 uppercase tracking-wider">
+                            "Construye tu base de salud cada mañana"
+                        </p>
+                    </div>
+                `
+            },
+            {
+                tag: "LÁMINA 6 • COMPROMISO REAL",
+                content: `
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-3xl">⚖️</span>
+                            <h3 class="serif-title text-xl font-bold text-brand-dark">Resultados con Constancia</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            No te vendemos recetas mágicas o milagros de un solo día. La salud real requiere compromiso propio:
+                        </p>
+                        <div class="space-y-3 text-xs text-slate-600">
+                            <p><strong>• Regularidad:</strong> Los resultados verdaderos aparecen cuando el Mix Verde se transforma en tu hábito matutino indiscutido y constante.</p>
+                            <p><strong>• Estilo de vida:</strong> Este poderoso shot 100% natural se potencia al máximo bebiendo abundante agua pura y consumiendo comida real.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                tag: "LÁMINA 7 • VALOR REAL",
+                content: `
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-3xl">🛒</span>
+                            <h3 class="serif-title text-xl font-bold text-brand-dark">Comparación Inteligente</h3>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3 mt-4">
+                            <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 text-center">
+                                <span class="text-xs font-black text-slate-400 block mb-1">Verdura Suelta</span>
+                                <span class="text-[11px] text-slate-500">Mucha pérdida, lavado eterno, se pudre en el cajón.</span>
+                            </div>
+                            <div class="border-2 border-brand-light rounded-xl p-3 bg-brand-soft text-center">
+                                <span class="text-xs font-black text-brand-dark block mb-1">Nuestro Mix</span>
+                                <span class="text-[11px] text-brand-medium font-bold">Cero desperdicio, listo en 1 min, congelado en origen.</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 text-center mt-4">
+                            "Mismo presupuesto, pero sin botar comida descompuesta."
+                        </p>
+                    </div>
+                `
+            },
+            {
+                tag: "LÁMINA 8 • TU FORMATO DE BIENESTAR",
+                content: `
+                    <div class="text-center">
+                        <span class="text-3xl block mb-2">🍏🥒🌱</span>
+                        <h3 class="serif-title text-lg font-bold text-brand-dark">Mix Verde Premium</h3>
+                        <p class="text-xs text-slate-500 mt-1">Manzana Verde, Pepino, Apio, Espinaca y Jengibre</p>
+                        
+                        <div class="my-4 bg-brand-dark text-white p-3 rounded-2xl">
+                            <span class="text-2xl font-black block">$5.000</span>
+                            <span class="text-[10px] uppercase font-bold text-brand-lime">Formato Familiar de 700g</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            Repartos directo a tu casa en Iquique y Alto Hospicio manteniendo estrictamente la cadena de frío.
+                        </p>
+                    </div>
+                `
+            }
+        ];
+
+        let currentSlideIndex = 0;
+        let selectedDays = 15; // <-- 🚨 DECLARADA E INICIALIZADA CORRECTAMENTE PARA EVITAR REFERENCEERROR 🚨
+        let selectedAiGoal = "";
+        let generatedAiText = "";
+
+        // Inicializar láminas
+        function loadSlide(index) {
+            const viewport = document.getElementById('slide-viewport');
+            const indexIndicator = document.getElementById('slide-index');
+            const tagIndicator = document.getElementById('slide-tag');
+            const prevBtn = document.getElementById('btn-prev');
+            const nextBtn = document.getElementById('btn-next');
+            
+            viewport.innerHTML = slides[index].content;
+            
+            tagIndicator.innerText = slides[index].tag;
+            indexIndicator.innerText = `${index + 1} de ${slides.length}`;
+            
+            renderDots(index);
+
+            if (index === 0) {
+                prevBtn.classList.add('opacity-30', 'pointer-events-none');
+            } else {
+                prevBtn.classList.remove('opacity-30', 'pointer-events-none');
+            }
+
+            if (index === slides.length - 1) {
+                nextBtn.innerHTML = `Terminar ✨`;
+            } else {
+                nextBtn.innerHTML = `Siguiente <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>`;
+            }
+        }
+
+        function renderDots(activeIdx) {
+            const dotsContainer = document.getElementById('dots-indicator');
+            dotsContainer.innerHTML = '';
+            slides.forEach((_, i) => {
+                const dot = document.createElement('span');
+                dot.className = `w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === activeIdx ? 'bg-brand-dark w-4' : 'bg-slate-200'}`;
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < slides.length - 1) {
+                currentSlideIndex++;
+                loadSlide(currentSlideIndex);
+            } else {
+                switchTab('calculadora');
+            }
+        }
+
+        // CAMBIO DE PESTAÑAS (SPA)
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-dark', 'font-bold');
+                btn.classList.add('text-slate-400', 'font-medium');
+            });
+            
+            const activeNav = document.getElementById(`nav-${tabName}`);
+            activeNav.classList.remove('text-slate-400', 'font-medium');
+            activeNav.classList.add('text-brand-dark', 'font-bold');
+        }
+
+        // SIMULADOR DE LICUADO
+        let blendStep = 1;
+        function nextBlendStep() {
+            const veggies = document.getElementById('blender-veggies');
+            const liquid = document.getElementById('blender-liquid');
+            const smoothie = document.getElementById('blender-smoothie');
+            const base = document.getElementById('blender-base');
+            const stepDesc = document.getElementById('step-desc');
+            const actionBtn = document.getElementById('btn-blend-action');
+            const led = document.getElementById('blender-led');
+
+            if (blendStep === 1) {
+                veggies.style.height = '60px';
+                stepDesc.innerText = "2. Añade un vaso de Agua / Agua de coco";
+                actionBtn.innerHTML = "<span>Verter agua en el vaso</span> <span class='text-xl'>💧</span>";
+                blendStep = 2;
+            } else if (blendStep === 2) {
+                liquid.style.height = '110px';
+                stepDesc.innerText = "3. ¡Enciende la juguera (60 segundos)!";
+                actionBtn.innerHTML = "<span>Encender Licuadora ⚡</span>";
+                actionBtn.className = "w-full bg-brand-light hover:bg-brand-medium text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-all animate-pulse";
+                blendStep = 3;
+            } else if (blendStep === 3) {
+                base.classList.add('blending');
+                led.classList.remove('bg-red-500');
+                led.classList.add('bg-green-500');
+                
+                stepDesc.innerText = "Mezclando y rompiendo la oxidación celular...";
+                actionBtn.innerHTML = "<span>Licuando...</span>";
+                actionBtn.disabled = true;
+
+                setTimeout(() => {
+                    base.classList.remove('blending');
+                    smoothie.style.height = '120px';
+                    stepDesc.innerText = "4. ¡Listo para Servir! Sin ensuciar nada.";
+                    actionBtn.innerHTML = "<span>¡Disfrutar de tu Nutrición Celular! 🍏</span>";
+                    actionBtn.className = "w-full bg-green-500 hover:bg-green-600 text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-all";
+                    actionBtn.disabled = false;
+                    blendStep = 4;
+                }, 3000);
+            } else if (blendStep === 4) {
+                switchTab('calculadora');
+            }
+        }
+
+        function resetBlender() {
+            blendStep = 1;
+            document.getElementById('blender-veggies').style.height = '0';
+            document.getElementById('blender-liquid').style.height = '0';
+            document.getElementById('blender-smoothie').style.height = '0';
+            document.getElementById('blender-base').classList.remove('blending');
+            document.getElementById('blender-led').className = "w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse";
+            document.getElementById('step-desc').innerText = "1. Abre tu bolsa de Mix Verde";
+            
+            const actionBtn = document.getElementById('btn-blend-action');
+            actionBtn.innerHTML = "<span>Añadir 200g de Mix Verde al vaso</span> <span class='text-xl'>👉</span>";
+            actionBtn.className = "w-full bg-brand-dark hover:bg-brand-medium text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition-all";
+            actionBtn.disabled = false;
+        }
+
+        // CALCULADORA DE DÍAS Y BOLSAS
+        function setDays(days) {
+            selectedDays = days;
+            document.getElementById('custom-days').value = days;
+            
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.className = "day-btn py-3 rounded-xl border-2 border-slate-200 hover:border-brand-light font-bold text-sm bg-slate-50 text-slate-600 transition-all active:scale-95";
+            });
+
+            event.target.className = "day-btn py-3 rounded-xl border-2 border-brand-light font-bold text-sm bg-brand-soft text-brand-dark transition-all active:scale-95";
+
+            calculateMetrics();
+        }
+
+        function calculateCustomDays() {
+            const inputVal = parseInt(document.getElementById('custom-days').value) || 1;
+            selectedDays = inputVal;
+
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.className = "day-btn py-3 rounded-xl border-2 border-slate-200 hover:border-brand-light font-bold text-sm bg-slate-50 text-slate-600 transition-all active:scale-95";
+            });
+
+            calculateMetrics();
+        }
+
+        function calculateMetrics() {
+            const bagsNeeded = Math.ceil(selectedDays / 4);
+            const price = bagsNeeded * 5000;
+            const totalWeight = (bagsNeeded * 0.7).toFixed(1);
+            const timeSaved = bagsNeeded * 15;
+
+            document.getElementById('res-bolsas').innerText = `${bagsNeeded} ${bagsNeeded === 1 ? 'Bolsa' : 'Bolsas'}`;
+            document.getElementById('res-precio').innerText = `$${price.toLocaleString('es-CL')}`;
+            document.getElementById('res-peso').innerText = `${totalWeight} Kilogramos`;
+            document.getElementById('res-tiempo').innerText = `~${timeSaved} Minutos`;
+        }
+
+        function sendOrderWhatsApp() {
+            const bagsNeeded = Math.ceil(selectedDays / 4);
+            const totalPrice = bagsNeeded * 5000;
+            const zone = document.getElementById('delivery-zone').value;
+
+            const message = `¡Hola! Estuve viendo la presentación y calculando mis porciones para mi plan diario de nutrición celular. 🍏🥒\n\nQuiero encargar:\n- Cantidad: ${bagsNeeded} bolsas de Mix Verde (700g cada una)\n- Plan de consumo: ${selectedDays} días\n- Despacho en: ${zone}\n- Total a transferir: $${totalPrice.toLocaleString('es-CL')}\n\n¿Me podrías confirmar para coordinar la entrega por favor? 🙌`;
+            
+            const waUrl = `https://api.whatsapp.com/send?phone=${TELEFONO_VENDEDOR}&text=${encodeURIComponent(message)}`;
+            
+            window.open(waUrl, '_blank');
+        }
+
+
+        // ==========================================
+        // 🚨 CONFIGURACIÓN & INTEGRACIÓN GEMINI API 🚨
+        // ==========================================
+        function selectAiGoal(goal) {
+            selectedAiGoal = goal;
+            document.querySelectorAll('.ai-goal-btn').forEach(btn => {
+                btn.className = "ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center";
+            });
+            event.target.className = "ai-goal-btn py-3 px-2 rounded-xl border-2 border-brand-light text-xs font-black text-brand-dark bg-brand-soft transition-all text-center";
+        }
+
+        // Helper para convertir el formato simple de Markdown de Gemini a HTML
+        function cleanMarkdownToHtml(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n\s*-\s*(.*?)/g, '<br>• $1')
+                .replace(/\n/g, '<br>');
+        }
+
+        // Función del Asesor IA con Retries y Exponencial Backoff
+        async function callGeminiAPI(prompt, systemInstruction) {
+            const apiKey = ""; // La API key vacía es inyectada en tiempo de ejecución por el entorno
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+
+            const maxRetries = 5;
+            let delay = 1000;
+
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error en servidor Gemini: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) return text;
+                    throw new Error("Respuesta vacía de la API de Gemini");
+                } catch (error) {
+                    if (i === maxRetries - 1) {
+                        throw error; // Se agotaron los reintentos
+                    }
+                    // Esperar antes del próximo reintento (exponential backoff)
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        // Evento de generación
+        async function generateAiProtocol() {
+            if (!selectedAiGoal) {
+                // Alerta bonita inyectada en lugar de alert()
+                showTemporaryToast("Por favor selecciona primero un objetivo de salud 🍏", true);
+                return;
+            }
+
+            const userQuery = document.getElementById('ai-user-query').value.trim();
+            const loader = document.getElementById('ai-loader');
+            const resultCard = document.getElementById('ai-results-card');
+            const loaderText = document.getElementById('ai-loader-text');
+
+            // Mostrar cargando
+            loader.classList.remove('hidden');
+            resultCard.classList.add('hidden');
+
+            const tips = [
+                "El apio ayuda a desinflamar los intestinos...",
+                "La espinaca aporta clorofila viva que oxigena la sangre...",
+                "El pepino te hidrata con agua viva estructurada...",
+                "El jengibre estimula los jugos gástricos de forma balanceada...",
+                "La manzana verde frena los radicales libres..."
+            ];
+            
+            let tipIndex = 0;
+            const tipInterval = setInterval(() => {
+                tipIndex = (tipIndex + 1) % tips.length;
+                loaderText.innerText = tips[tipIndex];
+            }, 1800);
+
+            // Prompts para Gemini
+            const systemPrompt = `Eres un experto chileno en nutrición celular, medicina preventiva y bienestar orgánico. Promueves de forma entusiasta y científicamente respaldada el 'Mix Verde Premium' (Manzana verde, Pepino, Apio, Espinaca y Jengibre) que vendes a $5.000 la bolsa de 700g en Iquique y Alto Hospicio.
+Tu tono debe ser muy cariñoso, empático, positivo y chileno amable ("compa", "mi rey/reina", "al tiro"). 
+Estructura la respuesta en 3 secciones cortas muy legibles y estéticas:
+1. 💡 ANÁLISIS: Cómo los 5 elementos del Mix Verde Premium actúan específicamente sobre la meta seleccionada y la condición que tiene el usuario.
+2. ⏱️ TU RUTINA DIARIA: Instrucciones de cómo tomar su dosis en ayunas de Mix Verde para lograr el máximo efecto terapéutico de nutrición celular.
+3. 📦 RECOMENDACIÓN DE STOCK: Cuántas bolsas de Mix Verde (700g c/u por $5.000, cada bolsa rinde 4 porciones potentes) debería encargar para notar los cambios reales en su bienestar (recomienda planes de 12 a 30 días).
+Recuerda siempre advertir con cariño que no existen milagros express y que la constancia diaria con hábitos saludables es la verdadera llave de la salud celular. No sugieras medicamentos ni cures enfermedades.`;
+
+            const prompt = `Meta seleccionada por el usuario: ${selectedAiGoal}. 
+Consulta o condición especial del usuario: ${userQuery || "Ninguna consulta adicional."}. 
+Por favor, genera mi protocolo personalizado en español.`;
+
+            try {
+                const responseText = await callGeminiAPI(prompt, systemPrompt);
+                clearInterval(tipInterval);
+                loader.classList.add('hidden');
+                
+                // Renderizar
+                generatedAiText = responseText;
+                document.getElementById('ai-rendered-response').innerHTML = cleanMarkdownToHtml(responseText);
+                resultCard.classList.remove('hidden');
+
+                // Hacer scroll hasta el resultado de forma suave
+                resultCard.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                clearInterval(tipInterval);
+                loader.classList.add('hidden');
+                showTemporaryToast("Hubo un pequeño retraso de red, por favor intenta presionar el botón de nuevo ⚡", true);
+            }
+        }
+
+        // Envío de WhatsApp con los datos generados por la IA
+        function sendAiWhatsAppOrder() {
+            if (!generatedAiText) return;
+
+            // Cortar texto para que no sature la URL de WhatsApp de caracteres inválidos
+            const shortAdvice = generatedAiText.substring(0, 700) + "... (Leído en mi informe de IA)";
+            const message = `¡Hola! Estuve usando el Asistente Nutricional IA de tu aplicación y me recomendó un protocolo especial para mi meta de "${selectedAiGoal}". 🍏\n\nAquí tienes las sugerencias que me dio el asesor artificial:\n\n${shortAdvice}\n\nQuiero coordinar la compra de mi pack sugerido de Mix Verde Premium para empezar al tiro con mi rutina saludable. ¿Tienen reparto disponible para estos días? 🙌`;
+
+            const waUrl = `https://api.whatsapp.com/send?phone=${TELEFONO_VENDEDOR}&text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+        }
+
+        // Mensaje temporal bonito
+        function showTemporaryToast(message, isError = false) {
+            let toast = document.getElementById('custom-alert-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'custom-alert-toast';
+                document.body.appendChild(toast);
+            }
+            toast.className = `fixed top-20 left-1/2 -translate-x-1/2 z-55 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-lg transition-all duration-300 w-11/12 max-w-xs text-center ${isError ? 'bg-red-600 border border-red-400' : 'bg-brand-dark border border-brand-light'}`;
+            toast.innerText = message;
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                loadSlide(currentSlideIndex);
+            }
+        }
+
+        // CARGA INICIAL
+        window.onload = function() {
+            loadSlide(currentSlideIndex);
+            calculateMetrics();
+        }
+    </script>
+</body>
+</html>
