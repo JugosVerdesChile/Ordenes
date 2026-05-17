@@ -89,7 +89,7 @@
     </header>
 
     <!-- Contenedor Principal Móvil -->
-    <main class="flex-grow max-w-md w-full mx-auto px-4 py-4 pb-28">
+    <main class="flex-grow max-w-md w-full mx-auto px-4 py-4 pb-24">
 
         <!-- PESTAÑA 1: PRESENTACIÓN INTERACTIVA (LÁMINAS) -->
         <section id="tab-presentacion" class="tab-content block">
@@ -282,76 +282,7 @@
             </div>
         </section>
 
-        <!-- PESTAÑA 4: ASESORÍA NUTRICIONAL INTELIGENTE (Gemini API Integration) -->
-        <section id="tab-asesoria" class="tab-content hidden">
-            <div class="bg-white rounded-3xl p-6 shadow-xl border border-brand-lime/30">
-                <div class="text-center mb-6">
-                    <span class="bg-brand-lime/40 text-brand-dark text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Asistente IA</span>
-                    <h2 class="serif-title text-2xl font-bold mt-2 text-brand-dark">Asesor de Salud IA 🤖</h2>
-                    <p class="text-xs text-slate-500 mt-1">Con el poder de la Inteligencia Artificial de Gemini, creamos un protocolo de bienestar a tu medida.</p>
-                </div>
-
-                <div class="space-y-4">
-                    <!-- Selección de Meta -->
-                    <div>
-                        <label class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">1. ¿Cuál es tu meta de salud hoy?</label>
-                        <div class="grid grid-cols-2 gap-2" id="ai-goals-container">
-                            <button onclick="selectAiGoal('Desintoxicar el Hígado 🧼')" class="ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center">Desintoxicar Hígado 🧼</button>
-                            <button onclick="selectAiGoal('Tener Más Energía ⚡')" class="ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center">Más Energía ⚡</button>
-                            <button onclick="selectAiGoal('Mejorar la Digestión 🟢')" class="ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center">Digestión Regular 🟢</button>
-                            <button onclick="selectAiGoal('Longevidad Celular ❤️')" class="ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center">Antienvejecimiento ❤️</button>
-                        </div>
-                    </div>
-
-                    <!-- Condición Personalizada -->
-                    <div>
-                        <label class="block text-xs font-bold text-brand-dark uppercase tracking-wider mb-2">2. ¿Tienes alguna condición o consulta especial? (Opcional)</label>
-                        <textarea id="ai-user-query" rows="2" placeholder="Ej: Tengo colon irritable, hipertensión, o sufro de mucha fatiga en las tardes..." class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-3 px-4 text-xs font-medium text-slate-700 focus:border-brand-light focus:outline-none resize-none"></textarea>
-                    </div>
-
-                    <!-- Botón Generador -->
-                    <button onclick="generateAiProtocol()" class="w-full bg-brand-dark hover:bg-brand-medium text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-brand-dark/20 flex items-center justify-center gap-2 transition-all active:scale-95">
-                        <span>✨ Obtener Protocolo Personalizado ✨</span>
-                    </button>
-
-                    <!-- Loader del Asistente -->
-                    <div id="ai-loader" class="hidden bg-brand-soft/80 border border-brand-lime/40 rounded-2xl p-5 text-center space-y-3 animate-pulse">
-                        <div class="flex justify-center">
-                            <svg class="animate-spin h-8 w-8 text-brand-medium" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
-                        <p class="text-xs font-bold text-brand-dark" id="ai-loader-text">Analizando propiedades celulares del Pepino, Espinaca y Apio...</p>
-                        <p class="text-[10px] text-slate-400">Gemini está formulando tu rutina diaria óptima...</p>
-                    </div>
-
-                    <!-- Resultados de la Recomendación IA -->
-                    <div id="ai-results-card" class="hidden bg-emerald-50 border border-brand-lime/40 rounded-3xl p-5 space-y-4">
-                        <div class="flex items-center gap-2 border-b border-brand-lime/20 pb-2">
-                            <span class="text-xl">📋</span>
-                            <div>
-                                <h4 class="font-extrabold text-xs text-brand-dark uppercase tracking-wider">Tu Plan Sugerido por IA</h4>
-                                <span class="text-[9px] text-brand-light font-bold" id="ai-result-tag">Plan Generado en Vivo</span>
-                            </div>
-                        </div>
-
-                        <!-- Bloque de Texto de IA -->
-                        <div class="text-xs text-slate-700 leading-relaxed space-y-3" id="ai-rendered-response">
-                            <!-- Inyección HTML de la respuesta -->
-                        </div>
-
-                        <!-- Botón WhatsApp Especial IA -->
-                        <button onclick="sendAiWhatsAppOrder()" class="w-full bg-green-500 hover:bg-green-600 text-white font-black py-3 px-4 rounded-xl shadow-md text-xs flex items-center justify-center gap-2 transition-all">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.451 5.486 0 9.95-4.46 9.954-9.93.002-2.651-1.02-5.143-2.877-7c-1.856-1.856-4.324-2.879-6.973-2.88-5.49 0-9.956 4.461-9.96 9.932-.001 1.631.43 3.22 1.249 4.636l-.984 3.595 3.68-.964zm10.607-7.234c-.3-.15-1.776-.876-2.046-.975-.27-.1-.466-.15-.66.15-.194.3-.755.95-.925 1.14-.17.19-.34.215-.64.065-.3-.15-1.266-.466-2.411-1.487-.891-.795-1.492-1.777-1.667-2.077-.175-.3-.018-.463.13-.612.134-.133.3-.349.45-.523.15-.174.2-.3.3-.5.1-.2.05-.375-.025-.524-.075-.15-.66-1.59-.905-2.18-.24-.575-.48-.497-.66-.505-.17-.008-.365-.01-.56-.01-.195 0-.51.074-.777.364-.266.29-1.016.992-1.016 2.42 0 1.427 1.039 2.806 1.184 3.001.145.195 2.044 3.121 4.953 4.38.691.3 1.232.478 1.653.611.693.22 1.325.19 1.825.115.557-.083 1.776-.726 2.026-1.427.25-.7 0-1.3-.075-1.425-.075-.125-.27-.2-1.57-.85z"/></svg>
-                            <span>✨ Solicitar Pack Sugerido por IA ✨</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PESTAÑA 5: SINERGIA Y COMPROMISO DE CALIDAD -->
+        <!-- PESTAÑA 4: SINERGIA Y COMPROMISO DE CALIDAD -->
         <section id="tab-ingredientes" class="tab-content hidden">
             <!-- Cuadrícula de Sinergia Nutricional -->
             <div class="bg-white rounded-3xl p-6 shadow-xl border border-brand-lime/30 mb-5">
@@ -418,9 +349,9 @@
 
     </main>
 
-    <!-- Barra de Navegación Inferior (5 Columnas para acomodar Asesoría ✨) -->
+    <!-- Barra de Navegación Inferior (4 Columnas Limpias) -->
     <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 py-2.5 px-2 shadow-2xl z-40">
-        <div class="max-w-md mx-auto grid grid-cols-5 gap-1">
+        <div class="max-w-md mx-auto grid grid-cols-4 gap-1">
             <button onclick="switchTab('presentacion')" id="nav-presentacion" class="nav-btn flex flex-col items-center justify-center gap-1 py-1 text-brand-dark font-bold">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                 <span class="text-[9px] tracking-tight">Presentar</span>
@@ -432,11 +363,6 @@
             <button onclick="switchTab('calculadora')" id="nav-calculadora" class="nav-btn flex flex-col items-center justify-center gap-1 py-1 text-slate-400 hover:text-brand-light font-medium">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                 <span class="text-[9px] tracking-tight">Calcular</span>
-            </button>
-            <!-- Nueva pestaña de Asesoría de IA ✨ -->
-            <button onclick="switchTab('asesoria')" id="nav-asesoria" class="nav-btn flex flex-col items-center justify-center gap-1 py-1 text-slate-400 hover:text-brand-light font-medium">
-                <span class="text-lg">✨</span>
-                <span class="text-[9px] tracking-tight">Asesoría ✨</span>
             </button>
             <button onclick="switchTab('ingredientes')" id="nav-ingredientes" class="nav-btn flex flex-col items-center justify-center gap-1 py-1 text-slate-400 hover:text-brand-light font-medium">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
@@ -451,7 +377,7 @@
         // 🚨 MODIFICA TU NÚMERO DE WHATSAPP AQUÍ 🚨
         // ==========================================
         // Código país Chile (56) + 9 dígitos de tu móvil. Ejemplo: "569XXXXXXXX"
-        const TELEFONO_VENDEDOR = "56976128721"; 
+        const TELEFONO_VENDEDOR = "56912345678"; 
 
         // Datos del Presentador (Basado en el PDF original de Nutrición Celular)
         const slides = [
@@ -614,9 +540,7 @@
         ];
 
         let currentSlideIndex = 0;
-        let selectedDays = 15; // <-- 🚨 DECLARADA E INICIALIZADA CORRECTAMENTE PARA EVITAR REFERENCEERROR 🚨
-        let selectedAiGoal = "";
-        let generatedAiText = "";
+        let selectedDays = 15;
 
         // Inicializar láminas
         function loadSlide(index) {
@@ -662,6 +586,13 @@
                 loadSlide(currentSlideIndex);
             } else {
                 switchTab('calculadora');
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                loadSlide(currentSlideIndex);
             }
         }
 
@@ -787,166 +718,6 @@
             const waUrl = `https://api.whatsapp.com/send?phone=${TELEFONO_VENDEDOR}&text=${encodeURIComponent(message)}`;
             
             window.open(waUrl, '_blank');
-        }
-
-
-        // ==========================================
-        // 🚨 CONFIGURACIÓN & INTEGRACIÓN GEMINI API 🚨
-        // ==========================================
-        function selectAiGoal(goal) {
-            selectedAiGoal = goal;
-            document.querySelectorAll('.ai-goal-btn').forEach(btn => {
-                btn.className = "ai-goal-btn py-3 px-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 bg-slate-50 transition-all text-center";
-            });
-            event.target.className = "ai-goal-btn py-3 px-2 rounded-xl border-2 border-brand-light text-xs font-black text-brand-dark bg-brand-soft transition-all text-center";
-        }
-
-        // Helper para convertir el formato simple de Markdown de Gemini a HTML
-        function cleanMarkdownToHtml(text) {
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/\n\s*-\s*(.*?)/g, '<br>• $1')
-                .replace(/\n/g, '<br>');
-        }
-
-        // Función del Asesor IA con Retries y Exponencial Backoff
-        async function callGeminiAPI(prompt, systemInstruction) {
-            const apiKey = ""; // La API key vacía es inyectada en tiempo de ejecución por el entorno
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: { parts: [{ text: systemInstruction }] }
-            };
-
-            const maxRetries = 5;
-            let delay = 1000;
-
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`Error en servidor Gemini: ${response.status}`);
-                    }
-
-                    const result = await response.json();
-                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (text) return text;
-                    throw new Error("Respuesta vacía de la API de Gemini");
-                } catch (error) {
-                    if (i === maxRetries - 1) {
-                        throw error; // Se agotaron los reintentos
-                    }
-                    // Esperar antes del próximo reintento (exponential backoff)
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    delay *= 2;
-                }
-            }
-        }
-
-        // Evento de generación
-        async function generateAiProtocol() {
-            if (!selectedAiGoal) {
-                // Alerta bonita inyectada en lugar de alert()
-                showTemporaryToast("Por favor selecciona primero un objetivo de salud 🍏", true);
-                return;
-            }
-
-            const userQuery = document.getElementById('ai-user-query').value.trim();
-            const loader = document.getElementById('ai-loader');
-            const resultCard = document.getElementById('ai-results-card');
-            const loaderText = document.getElementById('ai-loader-text');
-
-            // Mostrar cargando
-            loader.classList.remove('hidden');
-            resultCard.classList.add('hidden');
-
-            const tips = [
-                "El apio ayuda a desinflamar los intestinos...",
-                "La espinaca aporta clorofila viva que oxigena la sangre...",
-                "El pepino te hidrata con agua viva estructurada...",
-                "El jengibre estimula los jugos gástricos de forma balanceada...",
-                "La manzana verde frena los radicales libres..."
-            ];
-            
-            let tipIndex = 0;
-            const tipInterval = setInterval(() => {
-                tipIndex = (tipIndex + 1) % tips.length;
-                loaderText.innerText = tips[tipIndex];
-            }, 1800);
-
-            // Prompts para Gemini
-            const systemPrompt = `Eres un experto chileno en nutrición celular, medicina preventiva y bienestar orgánico. Promueves de forma entusiasta y científicamente respaldada el 'Mix Verde Premium' (Manzana verde, Pepino, Apio, Espinaca y Jengibre) que vendes a $5.000 la bolsa de 700g en Iquique y Alto Hospicio.
-Tu tono debe ser muy cariñoso, empático, positivo y chileno amable ("compa", "mi rey/reina", "al tiro"). 
-Estructura la respuesta en 3 secciones cortas muy legibles y estéticas:
-1. 💡 ANÁLISIS: Cómo los 5 elementos del Mix Verde Premium actúan específicamente sobre la meta seleccionada y la condición que tiene el usuario.
-2. ⏱️ TU RUTINA DIARIA: Instrucciones de cómo tomar su dosis en ayunas de Mix Verde para lograr el máximo efecto terapéutico de nutrición celular.
-3. 📦 RECOMENDACIÓN DE STOCK: Cuántas bolsas de Mix Verde (700g c/u por $5.000, cada bolsa rinde 4 porciones potentes) debería encargar para notar los cambios reales en su bienestar (recomienda planes de 12 a 30 días).
-Recuerda siempre advertir con cariño que no existen milagros express y que la constancia diaria con hábitos saludables es la verdadera llave de la salud celular. No sugieras medicamentos ni cures enfermedades.`;
-
-            const prompt = `Meta seleccionada por el usuario: ${selectedAiGoal}. 
-Consulta o condición especial del usuario: ${userQuery || "Ninguna consulta adicional."}. 
-Por favor, genera mi protocolo personalizado en español.`;
-
-            try {
-                const responseText = await callGeminiAPI(prompt, systemPrompt);
-                clearInterval(tipInterval);
-                loader.classList.add('hidden');
-                
-                // Renderizar
-                generatedAiText = responseText;
-                document.getElementById('ai-rendered-response').innerHTML = cleanMarkdownToHtml(responseText);
-                resultCard.classList.remove('hidden');
-
-                // Hacer scroll hasta el resultado de forma suave
-                resultCard.scrollIntoView({ behavior: 'smooth' });
-            } catch (error) {
-                clearInterval(tipInterval);
-                loader.classList.add('hidden');
-                showTemporaryToast("Hubo un pequeño retraso de red, por favor intenta presionar el botón de nuevo ⚡", true);
-            }
-        }
-
-        // Envío de WhatsApp con los datos generados por la IA
-        function sendAiWhatsAppOrder() {
-            if (!generatedAiText) return;
-
-            // Cortar texto para que no sature la URL de WhatsApp de caracteres inválidos
-            const shortAdvice = generatedAiText.substring(0, 700) + "... (Leído en mi informe de IA)";
-            const message = `¡Hola! Estuve usando el Asistente Nutricional IA de tu aplicación y me recomendó un protocolo especial para mi meta de "${selectedAiGoal}". 🍏\n\nAquí tienes las sugerencias que me dio el asesor artificial:\n\n${shortAdvice}\n\nQuiero coordinar la compra de mi pack sugerido de Mix Verde Premium para empezar al tiro con mi rutina saludable. ¿Tienen reparto disponible para estos días? 🙌`;
-
-            const waUrl = `https://api.whatsapp.com/send?phone=${TELEFONO_VENDEDOR}&text=${encodeURIComponent(message)}`;
-            window.open(waUrl, '_blank');
-        }
-
-        // Mensaje temporal bonito
-        function showTemporaryToast(message, isError = false) {
-            let toast = document.getElementById('custom-alert-toast');
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'custom-alert-toast';
-                document.body.appendChild(toast);
-            }
-            toast.className = `fixed top-20 left-1/2 -translate-x-1/2 z-55 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-lg transition-all duration-300 w-11/12 max-w-xs text-center ${isError ? 'bg-red-600 border border-red-400' : 'bg-brand-dark border border-brand-light'}`;
-            toast.innerText = message;
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
-        function prevSlide() {
-            if (currentSlideIndex > 0) {
-                currentSlideIndex--;
-                loadSlide(currentSlideIndex);
-            }
         }
 
         // CARGA INICIAL
